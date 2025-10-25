@@ -1,36 +1,10 @@
-import mongoose from "mongoose";
+import express from "express";
+import { login, logout, signup } from "../controllers/auth.controller.js";
 
-const userSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    gender: {
-      type: String,
-      required: true,
-      enum: ["Male", "Female"],
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    assistantName: {
-      type: String,
-    },
-    assistantProfile: {
-      type: String,
-    },
-    history: [{ type: String }],
-  },
-  { timestamps: true }
-);
+const userRouter = express.Router();
 
-const User = mongoose.model("User", userSchema);
+userRouter.post("/signup", signup);
+userRouter.post("/login", login);
+userRouter.get("/logout", logout);
 
-export default User;
+export default userRouter;
