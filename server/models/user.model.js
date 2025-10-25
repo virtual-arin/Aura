@@ -20,12 +20,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    assistantName: {
-      type: String,
-    },
-    assistantProfile: {
-      type: String,
-    },
     history: [{ type: String }],
   },
   { timestamps: true }

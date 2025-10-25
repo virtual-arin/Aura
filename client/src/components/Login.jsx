@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import { serverUrl } from "../main";
+import { userDataContext } from "../contexts/userContext";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -10,6 +11,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { fetchCurrentUser } = useContext(userDataContext);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -25,14 +27,15 @@ const Login = () => {
 
     try {
       const result = await axios.post(
-        `${serverUrl}/api/user/login`,
+        `${serverUrl}/api/auth/login`,
         {
           email,
           password,
         },
         { withCredentials: true }
       );
-      navigate("/profile");
+      await fetchCurrentUser();
+      navigate("/");
     } catch (error) {
       setError(
         error.response?.data?.message || "An error occurred during login."
@@ -43,22 +46,22 @@ const Login = () => {
   };
 
   return (
-    <div className="flex min-h-screen w-full items-center justify-center bg-gray-100 p-4">
-      <div className="w-full max-w-md space-y-6 rounded-xl bg-white p-6 shadow-md sm:space-y-8 sm:p-8">
+    <div className="flex min-h-screen w-full items-center justify-center bg-[#23262f] p-4">
+      <div className="w-full max-w-md space-y-6 rounded-xl bg-[#343440] p-6 shadow-md sm:p-8 md:space-y-8">
         {/* Login Heading */}
         <div className="text-center">
-          <img src="/icon.png" alt="Aura Logo" className="mx-auto h-16 w-16" />
-          <h1 className="mt-4 text-2xl font-bold text-gray-900 sm:text-3xl">
+          <img src="/icon.png" alt="Aura Logo" className="mx-auto h-20 w-30" />
+          <h1 className="mt-4 text-2xl font-bold text-gray-100 sm:text-3xl md:text-3xl">
             Login to Aura
           </h1>
         </div>
 
         {/* Form */}
-        <form className="space-y-6" onSubmit={handleLogin}>
+        <form className="space-y-6" onSubmit={handleLogin} noValidate>
           <div className="w-full">
             <label
               htmlFor="email"
-              className="mb-1 block text-sm font-medium text-gray-700"
+              className="mb-1 block text-sm font-medium text-gray-300"
             >
               Email
             </label>
@@ -66,8 +69,9 @@ const Login = () => {
               id="email"
               name="email"
               type="email"
+              autoComplete="email"
               placeholder="Enter your email"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+              className="w-full rounded-md border border-gray-700 bg-[#2d3748] px-3 py-2 text-gray-200 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
               onChange={(e) => setEmail(e.target.value)}
               value={email}
             />
@@ -75,7 +79,7 @@ const Login = () => {
           <div className="w-full">
             <label
               htmlFor="password"
-              className="mb-1 block text-sm font-medium text-gray-700"
+              className="mb-1 block text-sm font-medium text-gray-300"
             >
               Password
             </label>
@@ -84,8 +88,9 @@ const Login = () => {
                 id="password"
                 name="password"
                 type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
                 placeholder="Enter your password"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+                className="w-full rounded-md border border-gray-700 bg-[#2d3748] px-3 py-2 text-gray-200 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
               />
@@ -107,11 +112,11 @@ const Login = () => {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
-        <p className="text-center text-sm text-gray-600">
+        <p className="text-center text-sm text-gray-400">
           Don't have an account?{" "}
           <Link
             to="/signup"
-            className="font-medium text-indigo-600 hover:text-indigo-500"
+            className="font-medium text-indigo-400 hover:text-indigo-300"
           >
             Sign up
           </Link>
