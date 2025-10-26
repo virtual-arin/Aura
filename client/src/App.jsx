@@ -11,7 +11,7 @@ const App = () => {
   return (
     <UserContext>
       <Routes>
-        <Route path="/signup" element={!userData ? <Signup /> : <Home />} />
+        <Route path="/signup" element={userData ? <Home /> : <Signup />} />
         <Route path="/login" element={userData ? <Home /> : <Login />} />
         <Route path="/" element={userData ? <Home /> : <Signup />} />
       </Routes>
