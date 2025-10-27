@@ -1,5 +1,6 @@
 import apiResponse from "../API/gemini.js";
 import User from "../models/user.model.js";
+import moment from "moment";
 
 //Get current user
 export const currentUser = async (req, res) => {
@@ -32,6 +33,22 @@ export const askAura = async (req, res) => {
         .json({ message: "I'm sorry, I'm a little confused by what you said" });
     }
 
-    const apiResult = jsonMatch[0];
+    const apiResult = JSON.parse(jsonMatch[0]);
+    const type = apiResult.type;
+
+    switch (type) {
+      case "get_date":
+        return res.json({
+          type,
+          userInput: apiResult.userInput,
+          response: `current date is ${moment().format("YYYY-MM-DD")}`,
+        });
+      case "get_time":
+        return res.json({
+          type,
+          userInput: apiResult.userInput,
+          response: `current time is ${moment().format("hh:mm A")}`,
+        });
+    }
   } catch (error) {}
 };
