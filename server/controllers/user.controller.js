@@ -49,6 +49,18 @@ export const askAura = async (req, res) => {
           userInput: apiResult.userInput,
           response: `current time is ${moment().format("hh:mm A")}`,
         });
+      case "get_day":
+        return res.json({
+          type,
+          userInput: apiResult.userInput,
+          response: `today is ${moment().format("dddd")}`,
+        });
+      case "get_month":
+        return res.json({
+          type,
+          userInput: apiResult.userInput,
+          response: `today is ${moment().format("MMMM")}`,
+        });
     }
   } catch (error) {}
 };
