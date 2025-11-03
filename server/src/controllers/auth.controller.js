@@ -5,7 +5,7 @@ import User from "../models/user.model.js";
 //Signup
 export const signup = async (req, res) => {
   try {
-    const { name, username, email, password, location, phoneNumber } = req.body;
+    const { username, email, password } = req.body;
 
     const userNameExist = await User.findOne({ username });
     if (userNameExist) {
@@ -23,24 +23,12 @@ export const signup = async (req, res) => {
         .json({ message: "Password must contain a minimum of 8 characters" });
     }
 
-    if (!name || !location || !phoneNumber) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Hold up! This field can't be empty. Please fill in the required information.",
-        });
-    }
-
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
-      name,
       username,
       email,
       password: hashedPassword,
-      location,
-      phoneNumber,
     });
 
     const token = await generateToken(user._id);

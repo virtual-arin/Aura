@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      default: "",
     },
     username: {
       type: String,
@@ -22,11 +22,11 @@ const userSchema = new mongoose.Schema(
     },
     location: {
       type: String,
-      required: true,
+      default: "",
     },
     phoneNumber: {
       type: Number,
-      required: true,
+      default: "",
     },
     profilePhoto: {
       type: String,
